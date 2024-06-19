@@ -12,13 +12,15 @@ jobs:
       # Step 1: Checkout code
       - name: Checkout code
         uses: actions/checkout@v4  # Updated to the latest version compatible with Node.js 20
+        with:
+          fetch-depth: 0  # Fetch all history for git operations
 
       # Step 2: Get Date
       - name: Get Date
         id: get-date
         run: |
           date=$(date -u +'%Y%m%d')
-          echo "date=$date" >> $GITHUB_ENV  # Using environment variables instead of set-output
+          echo "date=$date" >> $GITHUB_ENV  # Store the current date in an environment variable
         shell: bash
 
       # Step 3: Cache Buildozer global directory
@@ -40,12 +42,12 @@ jobs:
         uses: ArtemSBulgakov/buildozer-action@v1
         id: buildozer
         with:
-          command: buildozer android debug
-          buildozer_version: master
+          command: buildozer android debug  # Build the Android application in debug mode
+          buildozer_version: master  # Use the latest version of Buildozer
 
       # Step 6: Upload artifacts
       - name: Upload artifacts
         uses: actions/upload-artifact@v4  # Updated to the latest version
         with:
-          name: package
-          path: path/to/your/output.apk  # Ensure this path matches the actual output from Buildozer
+          name: package  # Name of the uploaded artifact
+          path: path/to/your/output.apk  # Replace with the actual path to the APK output from Buildozer
