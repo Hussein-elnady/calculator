@@ -1,4 +1,5 @@
 name: CI
+
 on:
   push:
     branches: [ main ]
@@ -8,26 +9,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      # Step 1: Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v4  # Updated to the latest version compatible with Node.js 20
 
-      # used to cache dependencies with a timeout
+      # Step 2: Get Date
       - name: Get Date
         id: get-date
         run: |
-          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+          date=$(date -u +'%Y%m%d')
+          echo "date=$date" >> $GITHUB_ENV  # Using environment variables instead of set-output
         shell: bash
 
+      # Step 3: Cache Buildozer global directory
       - name: Cache Buildozer global directory
-        uses: actions/cache@v2
+        uses: actions/cache@v4  # Updated to the latest version
         with:
           path: .buildozer_global
-          key: buildozer-global-${{ hashFiles('buildozer.spec') }} # Replace with your path
+          key: buildozer-global-${{ hashFiles('buildozer.spec') }}
 
-      - uses: actions/cache@v2
+      # Step 4: Cache Buildozer local directory
+      - name: Cache Buildozer local directory
+        uses: actions/cache@v4  # Updated to the latest version
         with:
           path: .buildozer
-          key: ${{ runner.os }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('buildozer.spec') }}
+          key: ${{ runner.os }}-${{ env.date }}-${{ hashFiles('buildozer.spec') }}
 
+      # Step 5: Build with Buildozer
       - name: Build with Buildozer
         uses: ArtemSBulgakov/buildozer-action@v1
         id: buildozer
@@ -35,8 +43,9 @@ jobs:
           command: buildozer android debug
           buildozer_version: master
 
+      # Step 6: Upload artifacts
       - name: Upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4  # Updated to the latest version
         with:
           name: package
-          path: ${{ steps.buildozer.outputs.filename }}
+          path: path/to/your/output.apk  # Ensure this path matches the actual output from Buildozer
