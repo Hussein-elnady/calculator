@@ -1,4 +1,5 @@
 name: CI
+
 on:
   push:
     branches: [ main ]
@@ -9,7 +10,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3  # Use the latest stable version
+        uses: actions/checkout@v4  # Update to the latest stable version using Node.js 20
 
       - name: Clean up Git configuration
         run: git config --unset-all http.https://github.com/.extraheader || true  # Clean up git config
@@ -20,13 +21,13 @@ jobs:
         shell: bash
 
       - name: Cache Buildozer global directory
-        uses: actions/cache@v3  # Use the latest stable version
+        uses: actions/cache@v4  # Update to the latest stable version using Node.js 20
         with:
           path: .buildozer_global
           key: buildozer-global-${{ hashFiles('buildozer.spec') }}
 
       - name: Cache Buildozer local directory
-        uses: actions/cache@v3  # Use the latest stable version
+        uses: actions/cache@v4  # Update to the latest stable version using Node.js 20
         with:
           path: .buildozer
           key: ${{ runner.os }}-${{ env.date }}-${{ hashFiles('buildozer.spec') }}
@@ -39,7 +40,7 @@ jobs:
           buildozer_version: stable
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3  # Use the latest stable version
+        uses: actions/upload-artifact@v3  # The latest stable version that supports Node.js 20
         with:
           name: package
           path: path/to/your/output.apk
