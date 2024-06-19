@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4-beta  # Use the latest pre-release version if available
+        uses: actions/checkout@v3  # Use the latest stable version
 
       - name: Clean up Git configuration
         run: git config --unset-all http.https://github.com/.extraheader || true  # Clean up git config
@@ -20,13 +20,13 @@ jobs:
         shell: bash
 
       - name: Cache Buildozer global directory
-        uses: actions/cache@v4-beta  # Use the latest pre-release version if available
+        uses: actions/cache@v3  # Use the latest stable version
         with:
           path: .buildozer_global
           key: buildozer-global-${{ hashFiles('buildozer.spec') }}
 
       - name: Cache Buildozer local directory
-        uses: actions/cache@v4-beta  # Use the latest pre-release version if available
+        uses: actions/cache@v3  # Use the latest stable version
         with:
           path: .buildozer
           key: ${{ runner.os }}-${{ env.date }}-${{ hashFiles('buildozer.spec') }}
@@ -39,7 +39,7 @@ jobs:
           buildozer_version: stable
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4-beta  # Use the latest pre-release version if available
+        uses: actions/upload-artifact@v3  # Use the latest stable version
         with:
           name: package
           path: path/to/your/output.apk
